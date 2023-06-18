@@ -88,14 +88,12 @@ const crypto = require('crypto');
 
 function Subscription (
     name, 
-    status,
     duration,
     annualPrice, 
     startDate,
     endDate
 ) {
     this.name = String(name).trim();
-    this.status = Boolean(status);
 
     if (typeof duration !== "number") {
         throw new Error("Must be a positive number");
@@ -110,7 +108,7 @@ function Subscription (
         annualPrice: {
             configurable: true,
             writable: true,
-            value: this.annualPrice = Number(annualPrice)
+            value: this.annualPrice = annualPrice
         },
         monthlyPrice: {
             get () {
@@ -122,11 +120,14 @@ function Subscription (
         },
         startDate: {
             enumerable: true,
-            value: this.startDate = new Date(startDate).getTime()
+            value: this.startDate = new Date(startDate)
         },
         endDate: {
+            value: this.endDate = new Date(startDate)
+        },
+        status: {
             get () {
-                this.endDate = endDate;
+                return Date.now() < this.endDate;
             }
         }
     });
@@ -144,7 +145,7 @@ Subscription.prototype.endDate = new Date('1995-12-17T03:24:00');
  * Fonction pour créer une nouvelle souscription
  */
 
-function createSubscription (name, status, duration, annualPrice, startDate) {
+function createSubscription (name, status, duration, annualPrice, startDate, endDate) {
 
     const subscription = new Subscription(...arguments);
 
@@ -156,10 +157,6 @@ function createSubscription (name, status, duration, annualPrice, startDate) {
         get (obj, prop) {
             if (prop === "annualPrice" || prop === "monthlyPrice") {
                 return obj[prop].toFixed(2) + " €";
-            };
-
-            if (prop === "status" && prop === false) {
-                
             };
 
             if (prop === "legalMentions") {
@@ -187,7 +184,7 @@ function createSubscription (name, status, duration, annualPrice, startDate) {
     });
 };
 
-const subscription1 = createSubscription ("ok", true, 10, 120, "2023-01-06T00:00:00");
+const subscription1 = createSubscription ("ok", 10, 120, "2023-01-06", "2023-06-17");
 
 /**
  * Tests
@@ -195,3 +192,4 @@ const subscription1 = createSubscription ("ok", true, 10, 120, "2023-01-06T00:00
 console.log(subscription1);
 subscription1.name = "Abonnement free";
 console.log(subscription1.legalMentions);
+console.log(subscription1.status);
