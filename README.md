@@ -38,7 +38,6 @@ Pensez à tester vos objets avec des valeurs "en dur" puis à supprimer vos test
 Maintenant, créez un proxy permettant de vous assurer du respect des contraintes suivantes lors de la manipulation des objets "abonnement" :
 
 - Les prix s'affichent toujours suivi du symbole € avec 2 décimales
-- L'id doit être invisible
 - Si l'abonnement est inactif, seuls le nom et la date de fin doivent pouvoir être lus.
 - Les mentions légales doivent être précédées de la mention "MENTIONS LEGALES SUJETTES A MODIFICATION: "
 - Les prix doivent être positifs (à verifier lors de la modification des prix)
